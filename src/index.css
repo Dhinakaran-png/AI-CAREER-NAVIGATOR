@@ -1440,453 +1440,619 @@ text-align:center;
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.3);
 }
-/* ============================= */
-/* RESUME AI ANALYSIS */
-/* ============================= */
+/* =========================================================
+   RESUME AI ANALYSIS - NEW UI
+   ========================================================= */
 
 .analysis-page {
   min-height: 100vh;
-  padding: 50px 20px;
+  padding: 50px 24px 80px;
+  box-sizing: border-box;
 }
 
 .analysis-container {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1150px;
   margin: 0 auto;
 }
 
-.analysis-container h1 {
-  text-align: center;
-  margin-bottom: 8px;
-}
 
-.analysis-subtitle {
-  text-align: center;
-  margin-bottom: 40px;
-}
+/* =========================================================
+   HEADER
+   ========================================================= */
 
-
-/* ============================= */
-/* AI ROBOT */
-/* ============================= */
-
-.ai-robot {
-  position: relative;
-  width: 180px;
-  height: 230px;
-  margin: 0 auto 25px;
-}
-
-.robot-antenna {
-  position: absolute;
-  top: 5px;
-  left: 87px;
-  width: 6px;
-  height: 25px;
-  border-radius: 10px;
-  background: #38bdf8;
-  box-shadow: 0 0 15px #38bdf8;
-}
-
-.robot-antenna::before {
-  content: "";
-  position: absolute;
-  top: -8px;
-  left: -4px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #22d3ee;
-  box-shadow: 0 0 20px #22d3ee;
-}
-
-.robot-head {
-  position: absolute;
-  top: 28px;
-  left: 35px;
-  width: 110px;
-  height: 82px;
-  border-radius: 35px;
-  background: linear-gradient(
-    145deg,
-    #f8fafc,
-    #94a3b8
-  );
-  border: 2px solid #38bdf8;
-  box-shadow:
-    0 0 25px rgba(56, 189, 248, 0.5),
-    inset 0 0 15px rgba(255, 255, 255, 0.7);
-}
-
-.robot-eyes {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  padding: 0 25px;
-}
-
-.robot-eyes span {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #06b6d4;
-  box-shadow:
-    0 0 12px #06b6d4,
-    0 0 25px rgba(6, 182, 212, 0.7);
-}
-
-.robot-neck {
-  position: absolute;
-  top: 108px;
-  left: 72px;
-  width: 36px;
-  height: 18px;
-  border-radius: 6px;
-  background: #64748b;
-}
-
-.robot-body {
-  position: absolute;
-  top: 120px;
-  left: 45px;
-  width: 90px;
-  height: 85px;
-  border-radius: 25px 25px 18px 18px;
-  background: linear-gradient(
-    145deg,
-    #e2e8f0,
-    #64748b
-  );
-  border: 2px solid #38bdf8;
-  box-shadow:
-    0 0 25px rgba(56, 189, 248, 0.35);
-}
-
-.robot-core {
-  position: absolute;
-  top: 25px;
-  left: 26px;
-  width: 38px;
-  height: 38px;
+.analysis-header {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  color: #082f49;
-  background: #67e8f9;
-  font-size: 12px;
-  font-weight: 800;
-  box-shadow:
-    0 0 15px #22d3ee,
-    0 0 30px rgba(34, 211, 238, 0.5);
+  gap: 22px;
+  margin-bottom: 45px;
 }
 
-.robot-arm {
-  position: absolute;
-  top: 130px;
-  width: 25px;
-  height: 70px;
-  border-radius: 15px;
-  background: linear-gradient(
-    #cbd5e1,
-    #64748b
-  );
-  border: 2px solid #38bdf8;
-}
+.analysis-robot {
+  width: 78px;
+  height: 78px;
 
-.left-arm {
-  left: 20px;
-  transform: rotate(12deg);
-}
-
-.right-arm {
-  right: 20px;
-  transform: rotate(-12deg);
-}
-
-
-/* ============================= */
-/* ANALYSIS CARDS */
-/* ============================= */
-
-.analysis-card {
-  padding: 28px;
-  margin-bottom: 20px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(15px);
-}
-
-.analysis-card h2 {
-  margin-bottom: 18px;
-}
-
-
-/* ============================= */
-/* ATS SCORE */
-/* ============================= */
-
-.ats-card {
-  text-align: center;
-}
-
-.ats-score {
-  font-size: 55px;
-  font-weight: 800;
-  margin: 15px 0;
-}
-
-.ats-score span {
-  font-size: 22px;
-  font-weight: 500;
-}
-
-
-/* ============================= */
-/* SKILLS */
-/* ============================= */
-
-.skills-list {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 24px;
+
+  font-size: 42px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(34, 211, 238, 0.14),
+      rgba(99, 102, 241, 0.12)
+    );
+
+  border:
+    1px solid
+    rgba(34, 211, 238, 0.25);
+
+  box-shadow:
+    0 0 40px rgba(34, 211, 238, 0.12);
 }
 
-.skill-tag {
-  display: inline-flex;
-  padding: 10px 16px;
-  border-radius: 20px;
-  background: rgba(34, 211, 238, 0.1);
-  border: 1px solid rgba(34, 211, 238, 0.35);
-  color: #67e8f9;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-
-/* ============================= */
-/* LISTS */
-/* ============================= */
-
-.analysis-card ul {
+.analysis-header h1 {
   margin: 0;
-  padding-left: 22px;
+
+  font-size: 40px;
+
+  line-height: 1.15;
+
+  letter-spacing: -1px;
 }
 
-.analysis-card li {
-  margin-bottom: 10px;
-  line-height: 1.6;
-}
+.analysis-header p {
+  margin: 9px 0 0;
 
+  font-size: 15px;
 
-/* ============================= */
-/* CAREER SUGGESTIONS */
-/* ============================= */
-
-.career-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.career-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.career-item span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: rgba(34, 211, 238, 0.15);
-  color: #67e8f9;
-  font-size: 13px;
-  font-weight: 700;
+  opacity: 0.55;
 }
 
 
-/* ============================= */
-/* BUTTON */
-/* ============================= */
+/* =========================================================
+   COMMON CARD
+   ========================================================= */
 
-.back-button {
-  display: block;
-  margin: 30px auto;
-  padding: 14px 26px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 700;
-}
-
-
-/* ============================= */
-/* EMPTY STATE */
-/* ============================= */
-
-.empty-analysis {
-  max-width: 600px;
-  margin: 80px auto;
-  text-align: center;
-}
-
-.mini-robot {
-  font-size: 60px;
-  margin-bottom: 20px;
-}
-
-
-/* ============================= */
-/* MOBILE */
-/* ============================= */
-
-@media (max-width: 600px) {
-
-  .analysis-page {
-    padding: 30px 15px;
-  }
-
-  .analysis-card {
-    padding: 20px;
-  }
-
-  .ats-score {
-    font-size: 45px;
-  }
-
-  .ai-robot {
-    transform: scale(0.85);
-    margin-bottom: 5px;
-  }
-
-}
-/* ============================= */
-/* SKILLS ANALYSIS */
-/* ============================= */
-
+.analysis-card,
+.ats-score-section,
 .skills-analysis-section {
-  padding: 30px;
-  margin-bottom: 22px;
-  border-radius: 22px;
 
-  background: rgba(255, 255, 255, 0.04);
+  box-sizing: border-box;
 
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.055),
+      rgba(255, 255, 255, 0.025)
+    );
 
-  backdrop-filter: blur(18px);
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.09);
+
+  border-radius: 24px;
+
+  backdrop-filter: blur(20px);
+
+  box-shadow:
+    0 20px 60px
+    rgba(0, 0, 0, 0.15);
 }
 
 
-/* HEADER */
+/* =========================================================
+   CARD TEXT
+   ========================================================= */
 
-.skills-analysis-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.card-label {
+  margin: 0 0 8px;
 
-  margin-bottom: 30px;
+  font-size: 10px;
+
+  letter-spacing: 2.5px;
+
+  font-weight: 800;
+
+  opacity: 0.45;
 }
 
-.skills-analysis-header h2 {
-  margin: 5px 0 8px;
-  font-size: 28px;
+.analysis-card h2,
+.ats-score-section h2,
+.skills-analysis-section h2 {
+
+  margin: 0 0 12px;
+
+  font-size: 26px;
+
+  letter-spacing: -0.4px;
 }
 
-.skills-description {
+
+/* =========================================================
+   ATS SCORE
+   ========================================================= */
+
+.ats-score-section {
+
+  padding: 34px;
+
+  margin-bottom: 24px;
+}
+
+.ats-score-header {
+  margin-bottom: 34px;
+}
+
+.ats-score-header h2 {
+  margin-bottom: 7px;
+}
+
+.ats-description {
+  max-width: 700px;
+
   margin: 0;
+
+  line-height: 1.7;
+
+  font-size: 14px;
+
+  opacity: 0.55;
+}
+
+
+/* ATS MAIN AREA */
+
+.ats-score-content {
+
+  display: grid;
+
+  grid-template-columns:
+    240px 1fr;
+
+  align-items: center;
+
+  gap: 55px;
+}
+
+
+/* ATS CIRCLE */
+
+.ats-circle {
+
+  --score: 0;
+
+  width: 205px;
+  height: 205px;
+
+  margin: auto;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+
+  border-radius: 50%;
+
+  background:
+    conic-gradient(
+      #22d3ee
+      calc(var(--score) * 1%),
+
+      rgba(255, 255, 255, 0.07)
+      0
+    );
+
+  box-shadow:
+    0 0 45px
+    rgba(34, 211, 238, 0.12);
+}
+
+
+/* INNER CIRCLE */
+
+.ats-circle::before {
+
+  content: "";
+
+  position: absolute;
+
+  width: 166px;
+  height: 166px;
+
+  border-radius: 50%;
+
+  background:
+    #020817;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.06);
+}
+
+
+.ats-circle-inner {
+
+  position: relative;
+
+  z-index: 2;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+}
+
+
+.ats-circle-inner strong {
+
+  font-size: 55px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: -2px;
+}
+
+
+.ats-circle-inner span {
+
+  margin-top: 8px;
+
+  font-size: 13px;
+
+  opacity: 0.45;
+}
+
+
+/* ATS INFO */
+
+.ats-info h3 {
+
+  margin: 0 0 12px;
+
+  font-size: 25px;
+}
+
+.ats-info p {
+
+  max-width: 650px;
+
+  margin: 0;
+
+  font-size: 14px;
+
+  line-height: 1.8;
+
   opacity: 0.6;
 }
 
 
-/* TOTAL */
+/* PROGRESS */
 
-.skills-total {
-  min-width: 90px;
-  padding: 15px;
+.ats-progress {
 
-  text-align: center;
+  width: 100%;
+
+  height: 9px;
+
+  margin-top: 27px;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  background:
+    rgba(255, 255, 255, 0.07);
+}
+
+.ats-progress-fill {
+
+  height: 100%;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #22d3ee,
+      #60a5fa
+    );
+
+  box-shadow:
+    0 0 15px
+    rgba(34, 211, 238, 0.6);
+
+  transition:
+    width 0.8s ease;
+}
+
+
+/* SCALE */
+
+.ats-scale {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-top: 9px;
+
+  padding: 0 2px;
+
+  font-size: 10px;
+
+  opacity: 0.35;
+}
+
+
+/* =========================================================
+   ATS FACTORS
+   ========================================================= */
+
+.ats-factors {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 12px;
+
+  margin-top: 35px;
+
+  padding-top: 28px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.07);
+}
+
+.ats-factor {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  min-width: 0;
+
+  padding: 16px;
 
   border-radius: 16px;
 
-  background: rgba(34, 211, 238, 0.08);
+  background:
+    rgba(255, 255, 255, 0.025);
 
-  border: 1px solid rgba(34, 211, 238, 0.2);
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.05);
+}
+
+.factor-icon {
+
+  width: 34px;
+  height: 34px;
+
+  min-width: 34px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  color: #22d3ee;
+
+  background:
+    rgba(34, 211, 238, 0.1);
+}
+
+.ats-factor strong {
+
+  display: block;
+
+  margin-bottom: 4px;
+
+  font-size: 13px;
+}
+
+.ats-factor p {
+
+  margin: 0;
+
+  font-size: 10px;
+
+  line-height: 1.4;
+
+  opacity: 0.45;
+}
+
+
+/* =========================================================
+   SUMMARY
+   ========================================================= */
+
+.analysis-card {
+
+  padding: 30px;
+
+  margin-bottom: 24px;
+}
+
+.summary-text {
+
+  max-width: 900px;
+
+  margin: 0;
+
+  font-size: 15px;
+
+  line-height: 1.9;
+
+  opacity: 0.65;
+}
+
+
+/* =========================================================
+   SKILLS
+   ========================================================= */
+
+.skills-analysis-section {
+
+  padding: 30px;
+
+  margin-bottom: 24px;
+}
+
+.skills-analysis-header {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 30px;
+}
+
+.skills-description {
+
+  margin: 0;
+
+  font-size: 14px;
+
+  opacity: 0.55;
+}
+
+
+/* SKILL COUNT */
+
+.skills-total {
+
+  min-width: 85px;
+
+  padding: 13px 18px;
+
+  text-align: center;
+
+  border-radius: 15px;
+
+  background:
+    rgba(34, 211, 238, 0.08);
+
+  border:
+    1px solid
+    rgba(34, 211, 238, 0.18);
 }
 
 .skills-total strong {
+
   display: block;
 
-  font-size: 30px;
+  font-size: 28px;
+
+  line-height: 1;
 
   color: #22d3ee;
 }
 
 .skills-total span {
-  font-size: 12px;
-  opacity: 0.6;
+
+  display: block;
+
+  margin-top: 5px;
+
+  font-size: 10px;
+
+  opacity: 0.5;
 }
 
 
-/* GRID */
+/* SKILL GRID */
 
 .skills-analysis-grid {
+
   display: grid;
 
   grid-template-columns:
     repeat(3, 1fr);
 
-  gap: 15px;
+  gap: 14px;
 }
 
 
-/* CARD */
+/* SKILL CARD */
 
 .skill-analysis-card {
-  position: relative;
 
   display: flex;
+
   align-items: center;
 
   gap: 14px;
 
-  padding: 18px;
+  min-width: 0;
 
-  border-radius: 16px;
+  padding: 17px;
+
+  border-radius: 17px;
 
   background:
-    rgba(255, 255, 255, 0.035);
+    rgba(255, 255, 255, 0.025);
 
   border:
     1px solid
-    rgba(255, 255, 255, 0.07);
+    rgba(255, 255, 255, 0.06);
 
   transition:
     transform 0.2s ease,
-    border-color 0.2s ease;
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
 .skill-analysis-card:hover {
-  transform: translateY(-4px);
+
+  transform:
+    translateY(-4px);
 
   border-color:
-    rgba(34, 211, 238, 0.4);
+    rgba(34, 211, 238, 0.3);
+
+  background:
+    rgba(34, 211, 238, 0.04);
 }
 
 
 /* NUMBER */
 
 .skill-icon {
-  min-width: 42px;
+
+  width: 42px;
   height: 42px;
+
+  min-width: 42px;
 
   display: flex;
 
@@ -1895,47 +2061,55 @@ text-align:center;
 
   border-radius: 12px;
 
-  background:
-    rgba(34, 211, 238, 0.1);
+  font-size: 11px;
+
+  font-weight: 800;
 
   color: #22d3ee;
 
-  font-size: 12px;
-
-  font-weight: 800;
+  background:
+    rgba(34, 211, 238, 0.09);
 }
 
 
-/* CONTENT */
+/* TEXT */
 
 .skill-content {
+
   min-width: 0;
+
+  flex: 1;
 }
 
 .skill-content h3 {
+
   margin: 0 0 5px;
 
-  font-size: 16px;
+  font-size: 14px;
 
-  word-break: break-word;
+  line-height: 1.4;
+
+  overflow-wrap: anywhere;
 }
 
 .skill-content p {
+
   margin: 0;
 
-  font-size: 11px;
+  font-size: 10px;
 
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 
-/* STATUS */
+/* CHECK */
 
 .skill-status {
-  margin-left: auto;
 
   width: 25px;
   height: 25px;
+
+  min-width: 25px;
 
   display: flex;
 
@@ -1946,44 +2120,305 @@ text-align:center;
 
   color: #22d3ee;
 
-  background:
-    rgba(34, 211, 238, 0.1);
+  font-size: 11px;
 
-  font-size: 12px;
+  background:
+    rgba(34, 211, 238, 0.09);
 }
 
 
-/* EMPTY */
+/* =========================================================
+   CATEGORY
+   ========================================================= */
 
-.no-skills {
-  grid-column: 1 / -1;
+.category-grid {
 
-  padding: 35px;
+  display: grid;
 
-  text-align: center;
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 15px;
+}
+
+.category-box {
+
+  padding: 20px;
+
+  border-radius: 17px;
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.06);
+}
+
+.category-box h3 {
+
+  margin: 0 0 9px;
+
+  font-size: 15px;
+}
+
+.category-box p {
+
+  margin: 0;
+
+  font-size: 13px;
+
+  line-height: 1.7;
+
+  opacity: 0.55;
+}
+
+
+/* =========================================================
+   STRENGTHS + IMPROVEMENT
+   ========================================================= */
+
+.analysis-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 24px;
+}
+
+.analysis-list {
+
+  margin: 0;
+
+  padding: 0;
+
+  list-style: none;
+}
+
+.analysis-list li {
+
+  padding: 13px 0;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.06);
+}
+
+.analysis-list li:last-child {
+
+  border-bottom: none;
+}
+
+
+/* =========================================================
+   CAREER
+   ========================================================= */
+
+.career-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 14px;
+}
+
+.career-card {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  min-width: 0;
+
+  padding: 18px;
+
+  border-radius: 17px;
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.06);
+}
+
+.career-number {
+
+  width: 38px;
+  height: 38px;
+
+  min-width: 38px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  color: #22d3ee;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  background:
+    rgba(34, 211, 238, 0.1);
+}
+
+.career-card h3 {
+
+  margin: 0 0 5px;
+
+  font-size: 14px;
+
+  overflow-wrap: anywhere;
+}
+
+.career-card p {
+
+  margin: 0;
+
+  font-size: 10px;
+
+  opacity: 0.45;
+}
+
+
+/* =========================================================
+   AI RECOMMENDATION
+   ========================================================= */
+
+.ai-recommendation {
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 18px;
+}
+
+.recommendation-icon {
+
+  width: 50px;
+  height: 50px;
+
+  min-width: 50px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
 
   border-radius: 15px;
 
+  font-size: 23px;
+
+  color: #22d3ee;
+
   background:
-    rgba(255, 255, 255, 0.03);
-}
-
-.no-skills h3 {
-  margin-bottom: 8px;
-}
-
-.no-skills p {
-  margin: 0;
-
-  opacity: 0.6;
+    rgba(34, 211, 238, 0.1);
 }
 
 
-/* TABLET */
+/* =========================================================
+   BUTTON
+   ========================================================= */
 
-@media (max-width: 900px) {
+.analyze-again {
+
+  display: block;
+
+  margin: 38px auto 10px;
+
+  padding: 14px 30px;
+
+  border: none;
+
+  border-radius: 13px;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.analyze-again:hover {
+
+  transform:
+    translateY(-3px);
+
+  opacity: 0.85;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.analysis-empty {
+
+  max-width: 600px;
+
+  margin: 100px auto;
+
+  padding: 50px;
+
+  text-align: center;
+
+  border-radius: 24px;
+
+  background:
+    rgba(255, 255, 255, 0.04);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+}
+
+.empty-robot {
+
+  margin-bottom: 20px;
+
+  font-size: 65px;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 950px) {
+
+  .ats-factors {
+
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
 
   .skills-analysis-grid {
+
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .career-grid {
+
     grid-template-columns:
       repeat(2, 1fr);
   }
@@ -1991,25 +2426,130 @@ text-align:center;
 }
 
 
-/* MOBILE */
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
 
+  .analysis-page {
+
+    padding: 30px 15px 60px;
+  }
+
+  .analysis-header {
+
+    flex-direction: column;
+
+    text-align: center;
+  }
+
+  .analysis-header h1 {
+
+    font-size: 30px;
+  }
+
+  .analysis-header p {
+
+    font-size: 13px;
+  }
+
+  .analysis-card,
+  .ats-score-section,
   .skills-analysis-section {
+
     padding: 22px;
   }
 
-  .skills-analysis-header {
-    align-items: flex-start;
-    gap: 20px;
+  .ats-score-content {
+
+    grid-template-columns: 1fr;
+
+    gap: 30px;
+
+    text-align: center;
   }
 
-  .skills-analysis-header h2 {
-    font-size: 23px;
+  .ats-info p {
+
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .ats-factors {
+
+    grid-template-columns: 1fr;
+  }
+
+  .skills-analysis-header {
+
+    align-items: flex-start;
+
+    flex-direction: column;
   }
 
   .skills-analysis-grid {
+
     grid-template-columns: 1fr;
+  }
+
+  .category-grid {
+
+    grid-template-columns: 1fr;
+  }
+
+  .analysis-grid {
+
+    grid-template-columns: 1fr;
+  }
+
+  .career-grid {
+
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 450px) {
+
+  .analysis-header h1 {
+
+    font-size: 25px;
+  }
+
+  .analysis-robot {
+
+    width: 65px;
+    height: 65px;
+
+    font-size: 34px;
+  }
+
+  .ats-circle {
+
+    width: 170px;
+    height: 170px;
+  }
+
+  .ats-circle::before {
+
+    width: 137px;
+    height: 137px;
+  }
+
+  .ats-circle-inner strong {
+
+    font-size: 43px;
+  }
+
+  .ats-score-section {
+
+    padding: 20px;
   }
 
 }
