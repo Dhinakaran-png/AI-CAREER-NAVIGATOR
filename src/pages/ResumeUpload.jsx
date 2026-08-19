@@ -1,46 +1,85 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { uploadResume } from "../api/resumeApi";
 
 function ResumeUpload() {
 
+  const navigate = useNavigate();
+
   const [file, setFile] = useState(null);
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
 
   const handleFileChange = (e) => {
 
     setFile(e.target.files[0]);
+
     setMessage("");
 
   };
+
 
   const handleUpload = async () => {
 
     if (!file) {
 
-      setMessage("Please select a resume first.");
+      setMessage(
+        "Please select your resume."
+      );
+
       return;
 
     }
 
+
     try {
 
       setLoading(true);
-      setMessage("");
-
-      const result = await uploadResume(file);
 
       setMessage(
-        result.message || "Resume uploaded successfully!"
+        "AI is analyzing your resume..."
       );
+
+
+      const result =
+        await uploadResume(file);
+
+
+      if (!result.success) {
+
+        throw new Error(
+          result.message ||
+          "Resume analysis failed"
+        );
+
+      }
+
+
+      // Save analysis result
+      localStorage.setItem(
+        "resumeAnalysis",
+        JSON.stringify(result.analysis)
+      );
+
+
+      // Open analysis page
+      navigate("/resume-analysis");
+
 
     } catch (error) {
 
-      console.error("Resume Upload Error:", error);
+      console.error(
+        "Resume Upload Error:",
+        error
+      );
+
 
       setMessage(
         error.response?.data?.message ||
-        "Resume upload failed."
+        error.message ||
+        "Resume upload failed"
       );
 
     } finally {
@@ -51,19 +90,27 @@ function ResumeUpload() {
 
   };
 
+
   return (
 
     <div className="resume-upload-page">
 
       <div className="resume-upload-card">
 
+        <div className="upload-robot">
+          🤖
+        </div>
+
+
         <h1>
-          Upload Your Resume
+          Resume AI
         </h1>
 
         <p>
-          Upload your resume for AI-powered career analysis.
+          Upload your resume and let AI
+          analyze your career profile.
         </p>
+
 
         <input
           type="file"
@@ -71,11 +118,15 @@ function ResumeUpload() {
           onChange={handleFileChange}
         />
 
+
         {file && (
-          <p>
+
+          <p className="selected-file">
             Selected: {file.name}
           </p>
+
         )}
+
 
         <button
           onClick={handleUpload}
@@ -83,16 +134,18 @@ function ResumeUpload() {
         >
 
           {loading
-            ? "Uploading..."
-            : "Upload Resume"
-          }
+            ? "Analyzing..."
+            : "Analyze Resume"}
 
         </button>
 
+
         {message && (
+
           <p className="upload-message">
             {message}
           </p>
+
         )}
 
       </div>

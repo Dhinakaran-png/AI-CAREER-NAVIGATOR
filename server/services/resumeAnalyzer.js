@@ -1,613 +1,774 @@
 import fs from "fs";
+import path from "path";
 import { PDFParse } from "pdf-parse";
 import mammoth from "mammoth";
 
 
-
-// =================================
-// RESUME TEXT EXTRACTION
-// =================================
+// ==========================================
+// EXTRACT RESUME TEXT
+// ==========================================
 
 export const extractResumeText = async (file) => {
 
-  let text = "";
+  const extension =
+    path.extname(file.originalname).toLowerCase();
+
+  const filePath = file.path;
 
 
-  if (file.mimetype === "application/pdf") {
+  if (!fs.existsSync(filePath)) {
 
-
-    const dataBuffer =
-      fs.readFileSync(file.path);
-
-
-
-    const parser =
-      new PDFParse({
-
-        data: dataBuffer
-
-      });
-
-
-
-    const result =
-      await parser.getText();
-
-
-
-    text = result.text;
-
-
-
-    await parser.destroy();
-
+    throw new Error(
+      "Uploaded resume file not found"
+    );
 
   }
 
 
+  // ==========================================
+  // TXT
+  // ==========================================
 
-  else if (
+  if (extension === ".txt") {
 
-    file.mimetype ===
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    return fs.readFileSync(
+      filePath,
+      "utf8"
+    );
 
-  ) {
+  }
 
+
+  // ==========================================
+  // PDF
+  // ==========================================
+
+  if (extension === ".pdf") {
+
+    try {
+
+      const buffer =
+        fs.readFileSync(filePath);
+
+      const parser =
+        new PDFParse({
+          data: buffer
+        });
+
+      const result =
+        await parser.getText();
+
+      await parser.destroy();
+
+      return result.text || "";
+
+    } catch (error) {
+
+      console.error(
+        "PDF parsing error:",
+        error
+      );
+
+      throw new Error(
+        "Failed to extract text from PDF"
+      );
+
+    }
+
+  }
+
+
+  // ==========================================
+  // DOCX
+  // ==========================================
+
+  if (extension === ".docx") {
 
     const result =
       await mammoth.extractRawText({
-
-        path: file.path
-
+        path: filePath
       });
 
-
-
-    text = result.value;
-
+    return result.value || "";
 
   }
 
 
+  throw new Error(
+    "Only PDF, DOCX and TXT files are supported"
+  );
 
-  else {
+};
 
 
-    text =
-      fs.readFileSync(
+// ==========================================
+// ANALYZE RESUME
+// ==========================================
 
-        file.path,
+export const analyzeResume = async (
+  resumeText
+) => {
 
-        "utf8"
+  if (!resumeText) {
 
+    throw new Error(
+      "Resume text is empty"
+    );
+
+  }
+
+
+  // Keep original text
+  const text =
+    resumeText.toLowerCase();
+
+
+  // ==========================================
+  // SKILL DATABASE
+  // ==========================================
+
+  const skillPatterns = {
+
+    "HTML": [
+      "html",
+      "html5"
+    ],
+
+    "CSS": [
+      "css",
+      "css3"
+    ],
+
+    "JavaScript": [
+      "javascript",
+      "java script",
+      "js"
+    ],
+
+    "TypeScript": [
+      "typescript",
+      "type script",
+      "ts"
+    ],
+
+    "React": [
+      "react",
+      "reactjs",
+      "react.js"
+    ],
+
+    "Node.js": [
+      "node.js",
+      "nodejs",
+      "node js"
+    ],
+
+    "Express": [
+      "express.js",
+      "expressjs",
+      "express js"
+    ],
+
+    "MongoDB": [
+      "mongodb",
+      "mongo db"
+    ],
+
+    "MySQL": [
+      "mysql",
+      "my sql"
+    ],
+
+    "Git": [
+      "git"
+    ],
+
+    "GitHub": [
+      "github",
+      "git hub"
+    ],
+
+    "Python": [
+      "python"
+    ],
+
+    "Java": [
+      "java"
+    ],
+
+    "C++": [
+      "c++"
+    ],
+
+    "Artificial Intelligence": [
+      "artificial intelligence"
+    ],
+
+    "Machine Learning": [
+      "machine learning"
+    ],
+
+    "AWS": [
+      "aws",
+      "amazon web services"
+    ],
+
+    "Docker": [
+      "docker"
+    ],
+
+    "Kubernetes": [
+      "kubernetes",
+      "k8s"
+    ],
+
+    "SQL": [
+      "sql"
+    ],
+
+    "REST API": [
+      "rest api",
+      "restful api",
+      "restful"
+    ],
+
+    "Bootstrap": [
+      "bootstrap"
+    ],
+
+    "Tailwind CSS": [
+      "tailwind",
+      "tailwind css"
+    ],
+
+    "Next.js": [
+      "next.js",
+      "nextjs"
+    ],
+
+    "Figma": [
+      "figma"
+    ]
+
+  };
+
+
+  // ==========================================
+  // DETECT SKILLS
+  // ==========================================
+
+  const skills = [];
+
+
+  for (
+    const [skill, patterns]
+    of Object.entries(skillPatterns)
+  ) {
+
+    const found =
+      patterns.some(
+        (pattern) => {
+
+          const escaped =
+            pattern.replace(
+              /[.*+?^${}()|[\]\\]/g,
+              "\\$&"
+            );
+
+
+          const regex =
+            new RegExp(
+              `(^|[^a-z0-9+#])${escaped}([^a-z0-9+#]|$)`,
+              "i"
+            );
+
+
+          return regex.test(text);
+
+        }
       );
 
 
+    if (found) {
+
+      skills.push(skill);
+
+    }
+
   }
 
 
+  console.log(
+    "Detected Skills:",
+    skills
+  );
 
-  return text;
+
+  // ==========================================
+  // CATEGORY ANALYSIS
+  // ==========================================
 
+  const categoryAnalysis = {};
 
-};
 
+  const frontendSkills =
+    skills.filter(
+      skill =>
+        [
+          "HTML",
+          "CSS",
+          "JavaScript",
+          "TypeScript",
+          "React",
+          "Bootstrap",
+          "Tailwind CSS",
+          "Next.js"
+        ].includes(skill)
+    );
 
 
+  const backendSkills =
+    skills.filter(
+      skill =>
+        [
+          "Node.js",
+          "Express",
+          "Python",
+          "Java",
+          "C++",
+          "REST API"
+        ].includes(skill)
+    );
 
 
+  const databaseSkills =
+    skills.filter(
+      skill =>
+        [
+          "MongoDB",
+          "MySQL",
+          "SQL"
+        ].includes(skill)
+    );
 
 
-// =================================
-// AI RESUME SKILL ANALYSIS
-// =================================
+  const devopsSkills =
+    skills.filter(
+      skill =>
+        [
+          "Git",
+          "GitHub",
+          "Docker",
+          "Kubernetes",
+          "AWS"
+        ].includes(skill)
+    );
 
 
-export const analyzeResume = (text) => {
+  const aiSkills =
+    skills.filter(
+      skill =>
+        [
+          "Artificial Intelligence",
+          "Machine Learning"
+        ].includes(skill)
+    );
 
 
+  const designSkills =
+    skills.filter(
+      skill =>
+        [
+          "Figma"
+        ].includes(skill)
+    );
 
-const skillDatabase = [
 
+  if (frontendSkills.length) {
 
-/* FRONTEND */
+    categoryAnalysis.Frontend =
+      frontendSkills;
 
+  }
 
-{
-name:"HTML",
-category:"Frontend",
-keywords:["html","html5"]
-},
 
+  if (backendSkills.length) {
 
-{
-name:"CSS",
-category:"Frontend",
-keywords:["css","css3"]
-},
+    categoryAnalysis.Backend =
+      backendSkills;
 
+  }
 
-{
-name:"JavaScript",
-category:"Frontend",
-keywords:["javascript","js","ecmascript"]
-},
 
+  if (databaseSkills.length) {
 
-{
-name:"TypeScript",
-category:"Frontend",
-keywords:["typescript","ts"]
-},
+    categoryAnalysis.Database =
+      databaseSkills;
 
+  }
 
-{
-name:"React",
-category:"Frontend",
-keywords:["react","react.js","reactjs"]
-},
 
+  if (devopsSkills.length) {
 
-{
-name:"Next.js",
-category:"Frontend",
-keywords:["next.js","nextjs"]
-},
+    categoryAnalysis.DevOps =
+      devopsSkills;
 
+  }
 
-{
-name:"Angular",
-category:"Frontend",
-keywords:["angular"]
-},
 
+  if (aiSkills.length) {
 
-{
-name:"Vue.js",
-category:"Frontend",
-keywords:["vue","vuejs"]
-},
+    categoryAnalysis.AI =
+      aiSkills;
 
+  }
 
-{
-name:"Redux",
-category:"Frontend",
-keywords:["redux"]
-},
 
+  if (designSkills.length) {
 
-{
-name:"Tailwind CSS",
-category:"Frontend",
-keywords:["tailwind"]
-},
+    categoryAnalysis.Design =
+      designSkills;
 
+  }
 
-{
-name:"Bootstrap",
-category:"Frontend",
-keywords:["bootstrap"]
-},
 
+  // ==========================================
+  // ATS SCORE
+  // ==========================================
 
+  let atsScore = 35;
 
 
-/* BACKEND */
+  if (skills.length >= 3) {
 
+    atsScore += 10;
 
-{
-name:"Node.js",
-category:"Backend",
-keywords:["node","nodejs","node.js"]
-},
+  }
 
 
-{
-name:"Express.js",
-category:"Backend",
-keywords:["express","express.js"]
-},
+  if (skills.length >= 6) {
 
+    atsScore += 10;
 
-{
-name:"Python",
-category:"Backend",
-keywords:["python"]
-},
+  }
 
 
-{
-name:"Django",
-category:"Backend",
-keywords:["django"]
-},
+  if (skills.length >= 10) {
 
+    atsScore += 5;
 
-{
-name:"Java Spring Boot",
-category:"Backend",
-keywords:["spring boot","spring"]
-},
+  }
 
 
-{
-name:"REST API",
-category:"Backend",
-keywords:["rest api","api"]
-},
+  if (
+    text.includes("project") ||
+    text.includes("projects")
+  ) {
 
+    atsScore += 10;
 
+  }
 
 
+  if (
+    text.includes("education") ||
+    text.includes("degree") ||
+    text.includes("bachelor") ||
+    text.includes("master")
+  ) {
 
-/* DATABASE */
+    atsScore += 5;
 
+  }
 
-{
-name:"MongoDB",
-category:"Database",
-keywords:["mongodb","mongo"]
-},
 
+  if (
+    text.includes("experience") ||
+    text.includes("internship") ||
+    text.includes("work experience")
+  ) {
 
-{
-name:"MySQL",
-category:"Database",
-keywords:["mysql"]
-},
+    atsScore += 5;
 
+  }
 
-{
-name:"PostgreSQL",
-category:"Database",
-keywords:["postgresql"]
-},
 
+  if (
+    text.includes("github") ||
+    text.includes("git hub")
+  ) {
 
-{
-name:"Firebase",
-category:"Database",
-keywords:["firebase"]
-},
+    atsScore += 5;
 
+  }
 
 
+  if (
+    /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i
+      .test(resumeText)
+  ) {
 
+    atsScore += 5;
 
-/* CLOUD & DEVOPS */
+  }
 
 
-{
-name:"AWS",
-category:"Cloud",
-keywords:["aws"]
-},
+  if (
+    text.includes("phone") ||
+    text.includes("mobile") ||
+    /\b\d{10}\b/.test(text)
+  ) {
 
+    atsScore += 5;
 
-{
-name:"Azure",
-category:"Cloud",
-keywords:["azure"]
-},
+  }
 
 
-{
-name:"Docker",
-category:"DevOps",
-keywords:["docker"]
-},
+  if (atsScore > 100) {
 
+    atsScore = 100;
 
-{
-name:"Kubernetes",
-category:"DevOps",
-keywords:["kubernetes","k8s"]
-},
+  }
 
 
-{
-name:"Git",
-category:"DevOps",
-keywords:["git","github","gitlab"]
-},
+  // ==========================================
+  // SUMMARY
+  // ==========================================
 
+  const summary =
+    `AI detected ${skills.length} technical skills from your resume.`;
 
 
+  // ==========================================
+  // STRENGTHS
+  // ==========================================
 
+  const strengths = [];
 
-/* AI & DATA */
 
+  if (skills.length >= 5) {
 
-{
-name:"Artificial Intelligence",
-category:"AI",
-keywords:["artificial intelligence","ai"]
-},
+    strengths.push(
+      "Good technical skill coverage"
+    );
 
+  }
 
-{
-name:"Machine Learning",
-category:"AI",
-keywords:["machine learning","ml"]
-},
 
+  if (text.includes("project")) {
 
-{
-name:"Deep Learning",
-category:"AI",
-keywords:["deep learning"]
-},
+    strengths.push(
+      "Project experience included"
+    );
 
+  }
 
-{
-name:"TensorFlow",
-category:"AI",
-keywords:["tensorflow"]
-},
 
+  if (
+    text.includes("github") ||
+    text.includes("git hub")
+  ) {
 
-{
-name:"PyTorch",
-category:"AI",
-keywords:["pytorch"]
-},
+    strengths.push(
+      "GitHub portfolio included"
+    );
 
+  }
 
 
+  if (
+    text.includes("experience") ||
+    text.includes("internship")
+  ) {
 
+    strengths.push(
+      "Professional experience included"
+    );
 
-/* DATA SCIENCE */
+  }
 
 
-{
-name:"Data Science",
-category:"Data",
-keywords:["data science"]
-},
+  if (
+    text.includes("education") ||
+    text.includes("degree") ||
+    text.includes("bachelor")
+  ) {
 
+    strengths.push(
+      "Education information included"
+    );
 
-{
-name:"Pandas",
-category:"Data",
-keywords:["pandas"]
-},
+  }
 
 
-{
-name:"NumPy",
-category:"Data",
-keywords:["numpy"]
-},
+  // ==========================================
+  // WEAKNESSES
+  // ==========================================
 
+  const weaknesses = [];
 
-{
-name:"Power BI",
-category:"Data",
-keywords:["power bi"]
-},
 
+  if (!text.includes("project")) {
 
+    weaknesses.push(
+      "Add detailed project descriptions"
+    );
 
+  }
 
 
-/* TESTING */
+  if (
+    !text.includes("github") &&
+    !text.includes("git hub")
+  ) {
 
+    weaknesses.push(
+      "Add a GitHub portfolio link"
+    );
 
-{
-name:"Jest",
-category:"Testing",
-keywords:["jest"]
-},
+  }
 
 
-{
-name:"Selenium",
-category:"Testing",
-keywords:["selenium"]
-},
+  if (!text.includes("achievement")) {
 
+    weaknesses.push(
+      "Add measurable achievements"
+    );
 
-{
-name:"Cypress",
-category:"Testing",
-keywords:["cypress"]
-},
+  }
 
 
+  if (!text.includes("certification")) {
 
+    weaknesses.push(
+      "Consider adding relevant certifications"
+    );
 
+  }
 
-/* MOBILE */
 
+  if (skills.length < 5) {
 
-{
-name:"React Native",
-category:"Mobile",
-keywords:["react native"]
-},
+    weaknesses.push(
+      "Add more relevant technical skills"
+    );
 
+  }
 
-{
-name:"Flutter",
-category:"Mobile",
-keywords:["flutter"]
-},
 
+  // ==========================================
+  // CAREER SUGGESTIONS
+  // ==========================================
 
+  const careerSuggestions = [];
 
 
+  if (
+    skills.includes("HTML") ||
+    skills.includes("CSS") ||
+    skills.includes("JavaScript") ||
+    skills.includes("TypeScript") ||
+    skills.includes("React")
+  ) {
 
-/* PROGRAMMING */
+    careerSuggestions.push(
+      "Frontend Developer"
+    );
 
+  }
 
-{
-name:"Data Structures",
-category:"Programming",
-keywords:["data structures","dsa"]
-},
 
+  if (
+    skills.includes("Node.js") ||
+    skills.includes("Express") ||
+    skills.includes("MongoDB")
+  ) {
 
-{
-name:"Algorithms",
-category:"Programming",
-keywords:["algorithm"]
-},
+    careerSuggestions.push(
+      "Full Stack Developer"
+    );
 
+  }
 
-{
-name:"System Design",
-category:"Programming",
-keywords:["system design"]
-}
 
+  if (
+    skills.includes("Python") ||
+    skills.includes("Artificial Intelligence") ||
+    skills.includes("Machine Learning")
+  ) {
 
+    careerSuggestions.push(
+      "AI / Machine Learning Engineer"
+    );
 
-];
+  }
 
 
+  if (
+    skills.includes("AWS") ||
+    skills.includes("Docker") ||
+    skills.includes("Kubernetes")
+  ) {
 
+    careerSuggestions.push(
+      "Cloud / DevOps Engineer"
+    );
 
+  }
 
 
-// convert resume text lowercase
+  if (
+    skills.includes("Figma")
+  ) {
 
-const resumeText =
-text.toLowerCase();
+    careerSuggestions.push(
+      "UI/UX Designer"
+    );
 
+  }
 
 
+  // ==========================================
+  // RECOMMENDATIONS
+  // ==========================================
 
+  const recommendations = [
 
-// detect skills
+    "Improve project descriptions",
 
-const detectedSkills =
+    "Add measurable achievements",
 
-skillDatabase.filter(skill =>
+    "Add GitHub portfolio link",
 
-skill.keywords.some(keyword =>
+    "Learn advanced cloud technologies",
 
-resumeText.includes(keyword)
+    "Improve ATS keywords"
 
-)
+  ];
 
-);
 
+  // ==========================================
+  // FINAL RESULT
+  // ==========================================
 
+  return {
 
+    atsScore,
 
+    skills,
 
-const skills =
+    categoryAnalysis,
 
-detectedSkills.map(skill => skill.name);
+    summary,
 
+    strengths,
 
+    weaknesses,
 
+    careerSuggestions,
 
+    recommendations
 
-
-// category wise analysis
-
-const categoryAnalysis = {};
-
-
-
-detectedSkills.forEach(skill => {
-
-
-if(!categoryAnalysis[skill.category]){
-
-categoryAnalysis[skill.category] = [];
-
-}
-
-
-
-categoryAnalysis[skill.category]
-.push(skill.name);
-
-
-
-});
-
-
-
-
-
-
-
-// ATS SCORE
-
-let atsScore = 50;
-
-
-
-atsScore += skills.length * 3;
-
-
-
-if(text.length > 2000){
-
-atsScore += 10;
-
-}
-
-
-
-if(atsScore > 100){
-
-atsScore = 100;
-
-}
-
-
-
-
-
-
-
-return {
-
-
-atsScore,
-
-
-skills,
-
-
-categoryAnalysis,
-
-
-
-summary:
-
-`AI detected ${skills.length} technical skills from your resume.`,
-
-
-
-
-recommendations:[
-
-
-"Improve project descriptions",
-
-
-"Add measurable achievements",
-
-
-"Add GitHub portfolio link",
-
-
-"Learn advanced cloud technologies",
-
-
-"Improve ATS keywords"
-
-
-]
-
-
-};
-
-
+  };
 
 };

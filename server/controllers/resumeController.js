@@ -4,52 +4,47 @@ import {
 } from "../services/resumeAnalyzer.js";
 
 
-
-// ===============================
+// ======================================
 // UPLOAD & ANALYZE RESUME
-// ===============================
+// ======================================
 
 export const uploadResume = async (req, res) => {
 
-
   try {
 
-
-    // Check file
-
+    // Check uploaded file
     if (!req.file) {
 
-
       return res.status(400).json({
-
-        success:false,
-
-        message:"Please upload resume file"
-
+        success: false,
+        message: "Please upload resume file"
       });
-
 
     }
 
 
+    console.log(
+      "Resume Uploaded:",
+      req.file.originalname
+    );
 
 
-
-    console.log("Uploaded File:");
-
-    console.log(req.file);
-
-
-
-
-
-    // Extract text from resume
+    // ======================================
+    // EXTRACT RESUME TEXT
+    // ======================================
 
     const resumeText =
-      await extractResumeText(
-        req.file
-      );
+      await extractResumeText(req.file);
 
+
+    if (!resumeText || !resumeText.trim()) {
+
+      return res.status(400).json({
+        success: false,
+        message: "Could not extract text from resume"
+      });
+
+    }
 
 
     console.log(
@@ -58,120 +53,101 @@ export const uploadResume = async (req, res) => {
     );
 
 
-
-
-
-
-    // AI Resume Analysis
+    // ======================================
+    // ANALYZE RESUME
+    // ======================================
 
     const analysis =
-      analyzeResume(
-        resumeText
-      );
-
+      await analyzeResume(resumeText);
 
 
     console.log(
-      "Analysis Result:",
-      analysis
+      "ATS Score:",
+      analysis.atsScore
+    );
+
+    console.log(
+      "Skills:",
+      analysis.skills
     );
 
 
+    // ======================================
+    // SEND RESULT
+    // ======================================
 
+    return res.status(200).json({
 
-
-
-
-    // Send response
-
-    res.status(200).json({
-
-
-      success:true,
-
+      success: true,
 
       message:
-      "Resume analyzed successfully",
+        "Resume analyzed successfully",
 
 
+      file: {
 
-      file:{
+        name:
+          req.file.originalname,
 
-        name:req.file.originalname,
+        size:
+          req.file.size,
 
-        size:req.file.size,
-
-        type:req.file.mimetype
+        type:
+          req.file.mimetype
 
       },
 
 
-
-      analysis:{
-
+      analysis: {
 
         atsScore:
-        analysis.atsScore,
-
-
+          analysis.atsScore || 0,
 
         skills:
-        analysis.skills,
-
-
+          analysis.skills || [],
 
         categoryAnalysis:
-        analysis.categoryAnalysis,
-
-
+          analysis.categoryAnalysis || {},
 
         summary:
-        analysis.summary,
+          analysis.summary || "",
 
+        strengths:
+          analysis.strengths || [],
 
+        weaknesses:
+          analysis.weaknesses || [],
+
+        careerSuggestions:
+          analysis.careerSuggestions || [],
 
         recommendations:
-        analysis.recommendations
-
+          analysis.recommendations || []
 
       }
 
-
-
     });
-
-
-
-
 
   }
 
-  catch(error){
+  catch (error) {
 
-
-
-    console.log(
-      "Resume Upload Error:",
+    console.error(
+      "Resume Analysis Error:",
       error
     );
 
 
+    return res.status(500).json({
 
-    res.status(500).json({
+      success: false,
 
-
-      success:false,
-
-
-      message:error.message
-
+      message:
+        error.message ||
+        "Resume analysis failed"
 
     });
 
-
-
   }
-
-
 
 };

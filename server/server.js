@@ -54,10 +54,9 @@ app.use(
 
 
 app.use(
-"/api/resume",
-resumeRoutes
+  "/api/resume",
+  resumeRoutes
 );
-
 
 
 // =======================
